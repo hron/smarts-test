@@ -1,0 +1,3 @@
+[submodule "calcbox/vendor/plugins/backgroundrb"]
+	path = calcbox/vendor/plugins/backgroundrb
+	url = git://github.com/gnufied/backgroundrb.git
