@@ -85,14 +85,53 @@ module BackgrounDRb
     end
   end #end of class ThreadPool
 
+  class ResultStorage
+    attr_accessor :cache
+    def initialize()
+      @mutex = Mutex.new
+      @cache = {}
+    end
+
+    def gen_key key
+        key
+    end
+
+    # fetch object from cache
+    def [] key
+      @mutex.synchronize { @cache[gen_key(key)] }
+    end
+
+    def []= key,value
+      @mutex.synchronize { @cache[gen_key(key)] = value }
+    end
+
+    def delete key
+      @mutex.synchronize { @cache.delete(gen_key(key)) }
+    end
+
+    def shift key
+      val = nil
+      @mutex.synchronize do
+        val = @cache[key]
+        @cache.delete(key)
+      end
+      return val
+    end
+  end
+  
   class MetaWorker
-    attr_accessor :logger,:thread_pool
+    attr_accessor :logger,:thread_pool, :cache
     iattr_accessor :worker_name
     iattr_accessor :no_auto_load
 
     def initialize
       @logger = WorkerDummyLogger.new
       @thread_pool = ThreadPool.new(self,10)
+      @cache = ResultStorage.new()
+    end
+
+    def job_key
+      "test"
     end
   end
 end

@@ -2,4 +2,6 @@
 # See http://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
 
 en:
-  hello: "Hello world"
+  resolve_quadratic_equaction_errors_arguments: Errors in arguments.
+  resolve_quadratic_equaction_answer_any_number: The root of the equation is any number.
+  resolve_quadratic_equaction_answer_no_roots: The equation has no roots.
