@@ -12,63 +12,6 @@ class ArithmometerWorker < BackgrounDRb::MetaWorker
     cache[job_key][:answer] = args.values.inject(:+)
   end
 
-  # program sq;
-  # uses
-  #   SysUtils, Math;
-  # var a, b, c, d, r, i : real;
-  # begin
-  #   WriteLn ('Equation: A*x*x + B*x + C = 0');
-  #    Write ('Input A, B, C: ');
-  #    ReadLn (a, b, c);
-  #     if a = 0
-  #       then
-  #         begin
-  #         if b = 0
-  #           then
-  #             begin
-  #              if c = 0
-  #               then
-  #                 begin //Все коэффициенты равны нулю
-  #                 WriteLn ('The root of the equation is any number.')
-  #                 end
-  #                else
-  #                 begin //Нет корней - это когда есть только с
-  #                 WriteLn ('The equation has no roots.')
-  #                 end;
-  #             end
-  #            else
-  #             begin    //Линейное уравнение (а=0, b<>0)
-  #             WriteLn ('x=', (-c/b):2:2);
-  #             end;
-  #         end
-  #       else
-  #         begin
-  #         d := b*b - 4*a*c;//Вычисление дискриминанта
-  #         r := -b/(2*a);   //Вычисление действительной части
-  #           if d >= 0
-  #             then
-  #               begin
-  #                if d > 0
-  #                   then
-  #                     begin //Пихаем в i корень х1 - нечего ей простаивать!
-  #                     i := -(b + Sign(b)*Sqrt(d))/(2*a);
-  #                           //2 корень - по теореме Виета
-  #                     WriteLn ('x1=', i:2:2,' x2=', c/(a*i):2:2);
-  #                     end
-  #                   else
-  #                     begin
-  #                     WriteLn ('x1=x2=', r:2:2);
-  #                     end;
-  #                   end
-  #             else
-  #               begin //Теперь используем i по назначению - для определения
-  #                     //коэффициента при мнимой единице
-  #                  i := Sqrt(-d)/(2*a);
-  #                  WriteLn('x1=', r:2:2, '+ i*', i:2:2, ' x2=', r:2:2, '- i*', i:2:2);
-  #               end
-  #             end;
-  #   ReadLn;
-  # end.
   def resolve_quadratic_equaction(args = nil)
     cache[job_key] = { }
     cache[job_key][:errors] = []
@@ -97,9 +40,17 @@ class ArithmometerWorker < BackgrounDRb::MetaWorker
     else
       d = b*b - 4*a*c
       r = -b/(2*a)
-      if d == 0
+      if d < 0
         i = sqrt(-d)/(2*a)
-        cache[job_key][:answer] = sprintf( "x1 = %.2d + i*%.2d; x2 = %.2d - i*%.2d", r, i, r, i)
+        x1 = sprintf("x1 = %g + %g*i", r, i)
+        x2 = sprintf("x2 = %g - %g*i", r, i)
+        cache[job_key][:answer] = "#{x1}; #{x2}"
+      elsif d == 0
+        cache[job_key][:answer] = sprintf("x1 = x2 = %g", r)
+      else
+        root1 = (-b+sqrt(d))/(2*a)
+        root2 = c/(a*root1)
+        cache[job_key][:answer] = sprintf("x1 = %g; x2 = %g", root1, root2)
       end
     end
   end
