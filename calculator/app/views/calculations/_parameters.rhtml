@@ -1,0 +1,9 @@
+<label>Parameters</label>
+<fieldset>
+  <%- parameters.each do |k| %>
+    <label><%= k %></label>
+    <%= text_field_tag "task[parameters][#{k}]" %>
+    <br/>
+  <%- end %>
+</fieldset>
+

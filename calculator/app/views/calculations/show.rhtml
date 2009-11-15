@@ -1,0 +1,13 @@
+<ul>
+  <li>Description: <%= @task.description %></li>
+  <li>Time: <%= @task.time %></li>
+  <li>Answer: <%= @task.answer %></li>
+  <%- if @task.attributes['errors'] && @task.attributes['errors'].any? %>
+    <li>Errors:</li>
+    <ul>
+      <%- @task.attributes['errors'].each do |e| %>
+	<li><%= e %></li>
+      <%- end %>
+    </ul>
+  <%- end %>
+</ul>

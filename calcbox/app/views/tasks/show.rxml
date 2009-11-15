@@ -4,8 +4,8 @@ xml.task do
   xml.description @result[:description]
   xml.time @result[:time]
   xml.answer @result[:answer]
-  xml.errors do
-    if @result[:errors]
+  if @result[:errors].any?
+    xml.errors :type => "array" do
       @result[:errors].each do |e|
         xml.error e
       end

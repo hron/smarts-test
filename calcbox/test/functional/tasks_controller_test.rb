@@ -29,8 +29,9 @@ class TasksControllerTest < ActionController::TestCase
 
   test "should show task" do
     result = {
-      :type => 'quadratic_equaction',
-      :answer => "x = 5"
+      :type   => 'quadratic_equaction',
+      :answer => "x = 5",
+      :errors => []
     }
     BackgrounDRb::RailsWorkerProxy.any_instance.expects(:ask_result).returns(result)
     get :show, :id => "quadratic_equaction-a0b3c-15"
