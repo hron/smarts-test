@@ -1,0 +1,14 @@
+xml.instruct!
+xml.task do
+  xml.type @result[:type]
+  xml.description @result[:description]
+  xml.time @result[:time]
+  xml.answer @result[:answer]
+  xml.errors do
+    if @result[:errors]
+      @result[:errors].each do |e|
+        xml.error e
+      end
+    end
+  end
+end

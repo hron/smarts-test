@@ -2,6 +2,7 @@
 # See http://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
 
 en:
-  resolve_quadratic_equaction_errors_arguments: Errors in arguments.
-  resolve_quadratic_equaction_answer_any_number: The root of the equation is any number.
-  resolve_quadratic_equaction_answer_no_roots: The equation has no roots.
+  quadratic_equaction_errors_arguments_count: Errors in arguments (wrong count).
+  quadratic_equaction_errors_arguments_integer: Errors in arguments (some of arguments is not a numbers).
+  quadratic_equaction_answer_any_number: The root of the equation is any number.
+  quadratic_equaction_answer_no_roots: The equation has no roots.
