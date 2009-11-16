@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 class QuadraticEquactionWorker < BackgrounDRb::MetaWorker
   include Math
+  include Calcbox::WorkerHelpers
   
   set_worker_name :quadratic_equaction_worker
   def create(args = nil)
@@ -8,34 +9,11 @@ class QuadraticEquactionWorker < BackgrounDRb::MetaWorker
   end
   
   def calculate(args = nil)
-    cache[job_key] = {
-      :answer => "",
-      :errors => [],
-      :time => 0,
-      :description => args[:description] || ""
-    }
     started_at = Time.now
-    
-    # unless we have all parameters and all of them is an integer generate an error
-    unless args[:parameters].keys.to_set == ["a","b","c"].to_set
-      cache[job_key][:errors] << I18n.t(:quadratic_equaction_errors_arguments_count)
-      return
-    end
+    init_cache(args)
+    return unless ensure_parameters_count(args, [ "a","b","c" ])
+    return unless ensure_parameters_integers(args)
 
-    args[:parameters].each_pair do |k,v|
-      begin
-        args[:parameters][k] = Integer(v)
-      rescue
-        cache[job_key][:errors] << I18n.t(:quadratic_equaction_errors_arguments_integer)
-        return
-      end
-    end
-
-    # unless args.values.reject {|i| i.respond_to? "/" }.size == 0
-    #   cache[job_key][:errors] << I18n.t(:quadratic_equaction_errors_arguments)
-    #   return
-    # end
-      
     a = args[:parameters]["a"]
     b = args[:parameters]["b"]
     c = args[:parameters]["c"]
